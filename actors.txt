@@ -1,0 +1,30 @@
+Tom Hanks,Madonna
+Tom Hanks,Penny Marshall
+Tom Hanks,Rosie O'Donnell
+Tom Hanks,Kevin Bacon
+Tom Hanks,Bill Paxton
+Tom Hanks,Gary Sinise
+Madonna,Tom Hanks
+Madonna,Penny Marshall
+Madonna,Rosie O'Donnell
+Penny Marshall,Tom Hanks
+Penny Marshall,Madonna
+Penny Marshall,Rosie O'Donnell
+Rosie O'Donnell,Tom Hanks
+Rosie O'Donnell,Madonna
+Rosie O'Donnell,Penny Marshall
+Kevin Bacon,Tom Hanks
+Kevin Bacon,John Belushi
+Kevin Bacon,Donald Sutherland
+Kevin Bacon,Bill Paxton
+Kevin Bacon,Gary Sinise
+John Belushi,Kevin Bacon
+John Belushi,Donald Sutherland
+Donald Sutherland,Kevin Bacon
+Donald Sutherland,John Belushi
+Bill Paxton,Tom Hanks
+Bill Paxton,Kevin Bacon
+Bill Paxton,Gary Sinise
+Gary Sinise,Tom Hanks
+Gary Sinise,Kevin Bacon
+Gary Sinise,Bill Paxton
