@@ -1,78 +1,85 @@
 from stars_data import dict_add_relationship
 
-stars_relations = dict_add_relationship()
+def search(source, destination):
+  source_node = {
+    'description': source,
+    'parent': None,
+    'movie': None,
+    'cost': 0
+  }
 
-mapping = {}
+  destination_node = {
+    'description': destination
+  }
 
-for star, relations in stars_relations.items():
-  for relation in relations:
-    node = {
-      'description': relation['name'],
-      'movie': relation['movie'],
-      'parent': star,
-      'cost': 1
-    }
-    if star in mapping:
-      mapping[star].append(node)
+  mapping = build_mapping()
+  neighbors = []
+  visited = []
+
+  neighbors.append(source_node)
+
+  while (len(neighbors) > 0):
+    node, neighbors = pop(neighbors)
+    if (node['description'] == destination_node['description']):
+      route = []
+      route.append(node)
+      currentParent = get_node(node['parent'], visited)
+      while (not currentParent == None):
+        route.insert(0, currentParent)
+        currentParent = get_node(currentParent['parent'], visited)
+
+      cost = 0
+      for node in route:
+        if node['movie'] == None: print(f"{node['description']} acted with:")
+        else: print(f"{node['description']} at the movie {node['movie']}")
+
+        cost += node['cost']
+      print('Custo: ' + str(cost))
+      break
     else:
-      mapping[star] = [node]
+      if (not was_visited(visited, node['description'])):
+        visited.append(node)
+        neighbors.extend(get_childs_from(mapping, node['description']))
 
-def getChilds(city):
-  return mapping[city]
+def build_mapping():
+  stars_relations = dict_add_relationship()
 
-# Realizando a busca
-initialState = {
-  'description': 'Tom Hanks',
-  'parent': None,
-  'movie': None,
-  'cost': 0
-}
+  mapping = {}
+  for star, relations in stars_relations.items():
+    for relation in relations:
+      node = {
+        'description': relation['name'],
+        'movie': relation['movie'],
+        'parent': star,
+        'cost': 1
+      }
+      if star in mapping:
+        mapping[star].append(node)
+      else:
+        mapping[star] = [node]
 
-finalState = {
-  'description': 'John Belushi'
-}
+  return mapping
 
-neighbors = []
-visited = []
+# getChilds
+def get_childs_from(mapping, star):
+  return mapping[star]
 
-# Fronteira trabalhando como FIFO
-def getNeighbor():
+#  getNeighbor
+def pop(neighbors):
   node = neighbors[0]
   return node, neighbors[1:]
 
-def hasBeenVisited(city):
-  node = filter(lambda currentChild: currentChild['description'] == city, visited)
-  if list(node):
-    return True
+# hasBeenVisited
+def was_visited(visited, star):
+  node = filter(lambda currentChild: currentChild['description'] == star, visited)
+
+  if list(node): return True
+
   return False
 
-def getNode(city):
+# getNode
+def get_node(star, visited):
   for node in reversed(visited):
-    if (node['description'] == city):
+    if (node['description'] == star):
       return node
   return None
-
-neighbors.append(initialState)
-
-while (len(neighbors) > 0):
-  node, neighbors = getNeighbor()
-  if (node['description'] == finalState['description']):
-    route = []
-    route.append(node)
-    currentParent = getNode(node['parent'])
-    while (not currentParent == None):
-      route.insert(0, currentParent)
-      currentParent = getNode(currentParent['parent'])
-
-    cost = 0
-    for node in route:
-      if node['movie'] == None: print(f"{node['description']} acted with:")
-      else: print(f"{node['description']} at the movie {node['movie']}")
-
-      cost += node['cost']
-    print('Custo: ' + str(cost))
-    break
-  else:
-    if (not hasBeenVisited(node['description'])):
-      visited.append(node)
-      neighbors.extend(getChilds(node['description']))
