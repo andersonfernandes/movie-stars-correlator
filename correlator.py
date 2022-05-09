@@ -2,27 +2,20 @@ from stars_data import dict_add_relationship
 
 stars_relations = dict_add_relationship()
 
-path = 'stars.txt'
-stars = open(path)
-fullLines = stars.readlines()
-
-print(fullLines)
-print(stars_relations)
-
 mapping = {}
 
-for line in fullLines:
-  parent, description = line.strip().split(',')
-  node = {
-      'description': description,
-      'parent': parent,
+for star, relations in stars_relations.items():
+  for relation in relations:
+    node = {
+      'description': relation['name'],
+      'movie': relation['movie'],
+      'parent': star,
       'cost': 1
-  }
-  if parent in mapping:
-    mapping[parent].append(node)
-  else:
-    mapping[parent] = [node]
-
+    }
+    if star in mapping:
+      mapping[star].append(node)
+    else:
+      mapping[star] = [node]
 
 def getChilds(city):
   return mapping[city]
@@ -31,6 +24,7 @@ def getChilds(city):
 initialState = {
   'description': 'Tom Hanks',
   'parent': None,
+  'movie': None,
   'cost': 0
 }
 
@@ -72,7 +66,9 @@ while (len(neighbors) > 0):
 
     cost = 0
     for node in route:
-      print(node['description'])
+      if node['movie'] == None: print(f"{node['description']} acted with:")
+      else: print(f"{node['description']} at the movie {node['movie']}")
+
       cost += node['cost']
     print('Custo: ' + str(cost))
     break
@@ -80,5 +76,3 @@ while (len(neighbors) > 0):
     if (not hasBeenVisited(node['description'])):
       visited.append(node)
       neighbors.extend(getChilds(node['description']))
-
-stars.close()
