@@ -29,9 +29,9 @@ def search(source, destination):
         currentParent = get_node(currentParent['parent'], visited)
 
       cost = 0
+      print(f'Connecting {source} with {destination}:')
       for node in route:
-        if node['movie'] == None: print(f"{node['description']} acted with:")
-        else: print(f"{node['description']} at the movie {node['movie']}")
+        if node['movie'] != None: print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
 
         cost += node['cost']
       print('Custo: ' + str(cost))
@@ -60,16 +60,13 @@ def build_mapping():
 
   return mapping
 
-# getChilds
 def get_childs_from(mapping, star):
   return mapping[star]
 
-#  getNeighbor
 def pop(neighbors):
   node = neighbors[0]
   return node, neighbors[1:]
 
-# hasBeenVisited
 def was_visited(visited, star):
   node = filter(lambda currentChild: currentChild['description'] == star, visited)
 
@@ -77,7 +74,6 @@ def was_visited(visited, star):
 
   return False
 
-# getNode
 def get_node(star, visited):
   for node in reversed(visited):
     if (node['description'] == star):
