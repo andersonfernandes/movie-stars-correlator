@@ -1,14 +1,18 @@
-#Calcula o custo entre dois atores
+from stars_data import dict_add_relationship
 
-path = 'actors.txt'
-cities = open(path)
-fullLines = cities.readlines()
+stars_relations = dict_add_relationship()
+
+path = 'stars.txt'
+stars = open(path)
+fullLines = stars.readlines()
+
 print(fullLines)
+print(stars_relations)
 
 mapping = {}
 
 for line in fullLines:
-  parent, description = line.strip().split(',') 
+  parent, description = line.strip().split(',')
   node = {
       'description': description,
       'parent': parent,
@@ -22,8 +26,6 @@ for line in fullLines:
 
 def getChilds(city):
   return mapping[city]
-
-print(getChilds('Tom Hanks'))
 
 # Realizando a busca
 initialState = {
@@ -59,18 +61,15 @@ def getNode(city):
 neighbors.append(initialState)
 
 while (len(neighbors) > 0):
-  print(neighbors)
   node, neighbors = getNeighbor()
-  print(node)
   if (node['description'] == finalState['description']):
-    print('ENCONTREI...')
     route = []
     route.append(node)
     currentParent = getNode(node['parent'])
     while (not currentParent == None):
       route.insert(0, currentParent)
       currentParent = getNode(currentParent['parent'])
-    
+
     cost = 0
     for node in route:
       print(node['description'])
@@ -82,4 +81,4 @@ while (len(neighbors) > 0):
       visited.append(node)
       neighbors.extend(getChilds(node['description']))
 
-cities.close()
+stars.close()
