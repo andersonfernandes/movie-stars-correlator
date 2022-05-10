@@ -31,15 +31,16 @@ class Correlator:
       route.insert(0, currentParent)
       currentParent = self.__get_node(currentParent['parent'])
 
+    route.pop(0) # Removing source node
     cost = 0
-    print(f'Connecting {self.source} with {self.destination}:')
+    print(f'\nConnecting {self.source} with {self.destination}:')
     for node in route:
       if node['movie'] is None: continue
 
-      print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
+      print(f"{node['parent']} performed with {node['description']} at the movie {node['movie']}")
 
       cost += 1
-    print('cost: ' + str(cost))
+    print(f'cost: {str(cost)}\n')
 
     return route
 

@@ -19,6 +19,7 @@
   <div class="position-relative mt-5">
     <div class="position-absolute top-100 start-50 translate-middle">
       <button type="submit" class="btn btn-success">Find</button>
+      <a href="/" class="btn btn-default">Reset</a>
     </div>
   </div>
 </form>
@@ -27,7 +28,9 @@
 <div class="pt-5">
   <h3>Finding the path that connects {{request.form['source']}} to {{request.form['destination']}}</h3>
 
-  {# TODO: display results #}
+  {% for relation in correlator_data %}
+    <p><b>{{relation['parent']}}</b> performed with <b>{{relation['description']}}</b> at the movie <b>{{relation['movie']}}</b></p>
+  {% endfor %}
 </div>
 {% endif %}
 
