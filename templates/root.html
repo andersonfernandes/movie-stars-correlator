@@ -18,14 +18,14 @@
 
   <div class="position-relative mt-5">
     <div class="position-absolute top-100 start-50 translate-middle">
-      <button type="submit" class="btn btn-info">Submit</button>
+      <button type="submit" class="btn btn-success">Find</button>
     </div>
   </div>
 </form>
 
 {% if (correlator_data != None and source != '' and destination != '') %}
 <div class="pt-5">
-  <h3>Finding the path from {{request.form['source']}} to {{request.form['destination']}}</h3>
+  <h3>Finding the path that connects {{request.form['source']}} to {{request.form['destination']}}</h3>
 
   {# TODO: display results #}
 </div>

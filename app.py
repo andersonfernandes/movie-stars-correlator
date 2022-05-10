@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
+from correlator import Correlator
 
 app = Flask(__name__)
 
@@ -11,9 +12,7 @@ def root():
   if request.method  == 'POST':
     source = request.form['source']
     destination = request.form['destination']
-    correlator_data = {}
-
-    # TODO: call Correlator and fill correlator_data
+    correlator_data = Correlator(source, destination).search()
 
   return render_template(
     'root.html',
