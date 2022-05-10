@@ -66,7 +66,3 @@ def write_file():
             arq.write('\n')
 
     arq.close()
-
-#dict_handling()
-dict_add_relationship()
-write_file()

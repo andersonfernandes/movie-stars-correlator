@@ -1,5 +1,5 @@
 server:
-	FLASK_APP=application flask run
+	FLASK_APP=app flask run
 
 install:
 	pip3 install -r requirements.txt

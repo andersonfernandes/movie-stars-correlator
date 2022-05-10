@@ -1,6 +1,7 @@
-from stars_data import dict_add_relationship
 from queue import Queue
 from functools import reduce
+
+from .data import dict_add_relationship
 
 class Correlator:
   def __init__(self, source, destination):
