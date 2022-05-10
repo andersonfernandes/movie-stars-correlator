@@ -32,6 +32,11 @@ class Correlator:
       currentParent = self.__get_node(currentParent['parent'])
 
     route.pop(0) # Removing source node
+    self.__print_route(route)
+
+    return route
+
+  def __print_route(self, route):
     cost = 0
     print(f'\nConnecting {self.source} with {self.destination}:')
     for node in route:
@@ -41,8 +46,6 @@ class Correlator:
 
       cost += 1
     print(f'cost: {str(cost)}\n')
-
-    return route
 
   def __get_node(self, description):
     for node in reversed(self.visited):
