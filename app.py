@@ -1,9 +1,7 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template, request, url_for, redirect
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/<name>')
-def root(name=None):
-  return render_template('hello.html', name=name)
+@app.route('/', methods=('GET', 'POST'))
+def root():
+  return render_template('root.html')

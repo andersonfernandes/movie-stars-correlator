@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Movie Stars Correlator</h1>
+
+<form method="post">
+  <div class="row">
+    <div class="col">
+      <label for="source" class="form-label">Source Star</label>
+      <input type="text" name="source" placeholder="Source Star" class="form-control" value="{{ request.form['source'] }}"></input>
+    </div>
+
+    <div class="col">
+      <label for="destination" class="form-label">Destination Star</label>
+      <input type="text" name="destination" placeholder="Destination Star" class="form-control" value="{{ request.form['destination'] }}"></input>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-info">Submit</button>
+</form>
+{% endblock %}
