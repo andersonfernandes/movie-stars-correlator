@@ -1,51 +1,73 @@
 from stars_data import dict_add_relationship
+from functools import reduce
 
-def search(source, destination):
-  source_node = {
-    'description': source,
-    'parent': None,
-    'movie': None,
-    'cost': 0
-  }
+class Correlator:
+  def __init__(self, source, destination):
+    self.source = source
+    self.destination = destination
+    self.neighbors = [self.__source_node(source)]
+    self.visited = []
+    self.mapping = self.__build_mapping()
 
-  destination_node = {
-    'description': destination
-  }
+  def search(self):
+    while (len(self.neighbors) > 0):
+      node = self.__pop_node()
 
-  mapping = build_mapping()
-  neighbors = []
-  visited = []
+      if (node['description'] == self.destination):
+        return self.__get_route_to_root(node)
 
-  neighbors.append(source_node)
+      if (not self.__was_visited(node['description'])):
+        self.visited.append(node)
+        self.neighbors.extend(self.mapping[node['description']])
 
-  while (len(neighbors) > 0):
-    node, neighbors = pop(neighbors)
-    if (node['description'] == destination_node['description']):
-      route = []
-      route.append(node)
-      currentParent = get_node(node['parent'], visited)
-      while (not currentParent == None):
-        route.insert(0, currentParent)
-        currentParent = get_node(currentParent['parent'], visited)
+  def __get_route_to_root(self, node):
+    route = [node]
+    currentParent = self.__get_node(node['parent'])
+    while (not currentParent is None):
+      route.insert(0, currentParent)
+      currentParent = self.__get_node(currentParent['parent'])
 
-      cost = 0
-      print(f'Connecting {source} with {destination}:')
-      for node in route:
-        if node['movie'] != None: print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
+    cost = 0
+    print(f'Connecting {self.source} with {self.destination}:')
+    for node in route:
+      if node['movie'] != None: print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
 
-        cost += node['cost']
-      print('Custo: ' + str(cost))
-      break
-    else:
-      if (not was_visited(visited, node['description'])):
-        visited.append(node)
-        neighbors.extend(get_childs_from(mapping, node['description']))
+      cost += node['cost']
+    print('cost: ' + str(cost))
 
-def build_mapping():
-  stars_relations = dict_add_relationship()
+    return route
 
-  mapping = {}
-  for star, relations in stars_relations.items():
+  def __pop_node(self):
+    node = self.neighbors[0]
+    self.neighbors = self.neighbors[1:]
+    return node
+
+  def __get_node(self, description):
+    for node in reversed(self.visited):
+      if (node['description'] == description):
+        return node
+
+    return None
+
+  def __was_visited(self, description):
+    return any(filter(lambda currentChild: currentChild['description'] == description, self.visited))
+
+  def __source_node(self, source):
+    return {
+      'description': self.source,
+      'parent': None,
+      'movie': None,
+      'cost': 0
+    }
+
+  def __build_mapping(self):
+    stars_relations = dict_add_relationship()
+
+    return reduce(self.__build_node, stars_relations.items(), {})
+
+  def __build_node(self, mapping, data):
+    star, relations = data
+
     for relation in relations:
       node = {
         'description': relation['name'],
@@ -53,29 +75,10 @@ def build_mapping():
         'parent': star,
         'cost': 1
       }
+
       if star in mapping:
         mapping[star].append(node)
       else:
         mapping[star] = [node]
 
-  return mapping
-
-def get_childs_from(mapping, star):
-  return mapping[star]
-
-def pop(neighbors):
-  node = neighbors[0]
-  return node, neighbors[1:]
-
-def was_visited(visited, star):
-  node = filter(lambda currentChild: currentChild['description'] == star, visited)
-
-  if list(node): return True
-
-  return False
-
-def get_node(star, visited):
-  for node in reversed(visited):
-    if (node['description'] == star):
-      return node
-  return None
+    return mapping

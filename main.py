@@ -1,3 +1,3 @@
-from correlator import search
+from correlator import Correlator
 
-search('Tom Hanks', 'John Belushi')
+Correlator('Tom Hanks', 'John Belushi').search()
