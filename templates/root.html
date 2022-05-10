@@ -3,19 +3,32 @@
 {% block content %}
 <h1>Movie Stars Correlator</h1>
 
-<form method="post">
+<form method="post" class="mt-4">
   <div class="row">
     <div class="col">
       <label for="source" class="form-label">Source Star</label>
-      <input type="text" name="source" placeholder="Source Star" class="form-control" value="{{ request.form['source'] }}"></input>
+      <input type="text" name="source" id="source" placeholder="Source Star" class="form-control" value="{{ request.form['source'] }}"></input>
     </div>
 
     <div class="col">
       <label for="destination" class="form-label">Destination Star</label>
-      <input type="text" name="destination" placeholder="Destination Star" class="form-control" value="{{ request.form['destination'] }}"></input>
+      <input type="text" name="destination" id="destination" placeholder="Destination Star" class="form-control" value="{{ request.form['destination'] }}"></input>
     </div>
   </div>
 
-  <button type="submit" class="btn btn-info">Submit</button>
+  <div class="position-relative mt-5">
+    <div class="position-absolute top-100 start-50 translate-middle">
+      <button type="submit" class="btn btn-info">Submit</button>
+    </div>
+  </div>
 </form>
+
+{% if (correlator_data != None and source != '' and destination != '') %}
+<div class="pt-5">
+  <h3>Finding the path from {{request.form['source']}} to {{request.form['destination']}}</h3>
+
+  {# TODO: display results #}
+</div>
+{% endif %}
+
 {% endblock %}
