@@ -1,24 +1,27 @@
 from stars_data import dict_add_relationship
+from queue import Queue
 from functools import reduce
 
 class Correlator:
   def __init__(self, source, destination):
     self.source = source
     self.destination = destination
-    self.neighbors = [self.__source_node(source)]
+    self.neighbors = Queue()
     self.visited = []
     self.mapping = self.__build_mapping()
 
   def search(self):
-    while (len(self.neighbors) > 0):
-      node = self.__pop_node()
+    self.neighbors.put(self.__source_node())
+
+    while (not self.neighbors.empty()):
+      node = self.neighbors.get()
 
       if (node['description'] == self.destination):
         return self.__get_route_to_root(node)
 
       if (not self.__was_visited(node['description'])):
         self.visited.append(node)
-        self.neighbors.extend(self.mapping[node['description']])
+        list(map(self.neighbors.put, self.mapping[node['description']]))
 
   def __get_route_to_root(self, node):
     route = [node]
@@ -30,17 +33,14 @@ class Correlator:
     cost = 0
     print(f'Connecting {self.source} with {self.destination}:')
     for node in route:
-      if node['movie'] != None: print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
+      if node['movie'] is None: continue
 
-      cost += node['cost']
+      print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
+
+      cost += 1
     print('cost: ' + str(cost))
 
     return route
-
-  def __pop_node(self):
-    node = self.neighbors[0]
-    self.neighbors = self.neighbors[1:]
-    return node
 
   def __get_node(self, description):
     for node in reversed(self.visited):
@@ -52,29 +52,27 @@ class Correlator:
   def __was_visited(self, description):
     return any(filter(lambda currentChild: currentChild['description'] == description, self.visited))
 
-  def __source_node(self, source):
+  def __source_node(self):
     return {
       'description': self.source,
       'parent': None,
-      'movie': None,
-      'cost': 0
+      'movie': None
     }
 
   def __build_mapping(self):
     stars_relations = dict_add_relationship()
+    return reduce(self.__build_relations, stars_relations.items(), {})
 
-    return reduce(self.__build_node, stars_relations.items(), {})
-
-  def __build_node(self, mapping, data):
+  def __build_relations(self, mapping, data):
     star, relations = data
+    create_node = lambda relation: {
+      'description': relation['name'],
+      'movie': relation['movie'],
+      'parent': star
+    }
 
     for relation in relations:
-      node = {
-        'description': relation['name'],
-        'movie': relation['movie'],
-        'parent': star,
-        'cost': 1
-      }
+      node = create_node(relation)
 
       if star in mapping:
         mapping[star].append(node)
