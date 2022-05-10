@@ -1,6 +1,7 @@
-from stars_data import dict_add_relationship
 from queue import Queue
 from functools import reduce
+
+from .data import dict_add_relationship
 
 class Correlator:
   def __init__(self, source, destination):
@@ -30,17 +31,21 @@ class Correlator:
       route.insert(0, currentParent)
       currentParent = self.__get_node(currentParent['parent'])
 
+    route.pop(0) # Removing source node
+    self.__print_route(route)
+
+    return route
+
+  def __print_route(self, route):
     cost = 0
-    print(f'Connecting {self.source} with {self.destination}:')
+    print(f'\nConnecting {self.source} with {self.destination}:')
     for node in route:
       if node['movie'] is None: continue
 
-      print(f"{node['parent']} acted with {node['description']} at the movie {node['movie']}")
+      print(f"{node['parent']} performed with {node['description']} at the movie {node['movie']}")
 
       cost += 1
-    print('cost: ' + str(cost))
-
-    return route
+    print(f'cost: {str(cost)}\n')
 
   def __get_node(self, description):
     for node in reversed(self.visited):
