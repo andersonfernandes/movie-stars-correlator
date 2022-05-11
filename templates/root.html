@@ -26,7 +26,7 @@
 
 {% if (correlator_data != None and source != '' and destination != '') %}
 <div class="pt-5">
-  <h3>Finding the path that connects {{request.form['source']}} to {{request.form['destination']}}</h3>
+  <h3>Finding the path that connects {{request.form['source']}} to {{request.form['destination']}} with the cost {{correlator_data|length}}</h3>
 
   {% for relation in correlator_data %}
     <p><b>{{relation['parent']}}</b> performed with <b>{{relation['description']}}</b> at the movie <b>{{relation['movie']}}</b></p>
