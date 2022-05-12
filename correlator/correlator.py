@@ -1,7 +1,8 @@
 from queue import Queue
 from functools import reduce
 
-from .data import dict_add_relationship
+from .sample_data import dict_add_relationship
+from .data import movies_relations
 
 class Correlator:
   def __init__(self, source, destination):
@@ -14,15 +15,19 @@ class Correlator:
   def search(self):
     self.neighbors.put(self.__source_node())
 
+    print('Running search ...')
     while (not self.neighbors.empty()):
       node = self.neighbors.get()
 
       if (node['description'] == self.destination):
+        print('Search Complete with results')
         return self.__get_route_to_root(node)
 
       if (not self.__was_visited(node['description'])):
         self.visited.append(node)
         list(map(self.neighbors.put, self.mapping[node['description']]))
+
+    print('Search complete without results!')
 
   def __get_route_to_root(self, node):
     route = [node]
@@ -65,7 +70,7 @@ class Correlator:
     }
 
   def __build_mapping(self):
-    stars_relations = dict_add_relationship()
+    stars_relations = movies_relations()
     return reduce(self.__build_relations, stars_relations.items(), {})
 
   def __build_relations(self, mapping, data):

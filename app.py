@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect
-from correlator import Correlator
+from correlator import Correlator, load_movies_relations_graph
+
+# load_movies_relations_graph()
 
 app = Flask(__name__)
 
